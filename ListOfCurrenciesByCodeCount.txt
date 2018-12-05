@@ -1,0 +1,4 @@
+declare namespace soap='http://www.w3.org/2003/05/soap-envelope';
+declare namespace m='http://www.oorsprong.org/websamples.countryinfo';
+
+count(//m:ListOfCurrenciesByCodeResponse/m:ListOfCurrenciesByCodeResult/m:tCurrency)
