@@ -7237,6 +7237,7 @@ testRunner.testCase.setPropertyValue( "Key", verCode )</script>
                   <con:operator>=</con:operator>
                   <con:enabled>true</con:enabled>
                   <con:expectedValue>AD</con:expectedValue>
+                  <con:hasValue>false</con:hasValue>
                   <con:numberType>false</con:numberType>
                 </con:elements>
                 <con:elements>
@@ -7247,6 +7248,7 @@ testRunner.testCase.setPropertyValue( "Key", verCode )</script>
                   <con:operator>=</con:operator>
                   <con:enabled>true</con:enabled>
                   <con:expectedValue>AT</con:expectedValue>
+                  <con:hasValue>false</con:hasValue>
                   <con:numberType>false</con:numberType>
                 </con:elements>
                 <con:elements>
@@ -7257,6 +7259,7 @@ testRunner.testCase.setPropertyValue( "Key", verCode )</script>
                   <con:operator>=</con:operator>
                   <con:enabled>true</con:enabled>
                   <con:expectedValue>AX</con:expectedValue>
+                  <con:hasValue>false</con:hasValue>
                   <con:numberType>false</con:numberType>
                 </con:elements>
                 <con:originalMessage><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
@@ -7364,6 +7367,9 @@ testRunner.testCase.setPropertyValue( "Key", verCode )</script>
    </soap:Body>
 </soap:Envelope>]]></con:originalMessage>
               </con:configuration>
+            </con:assertion>
+            <con:assertion type="XPath Match" id="826b2a7e-462a-4d7a-910f-c62a83eb55e9" name="XPath Match">
+              <con:configuration/>
             </con:assertion>
             <con:credentials>
               <con:selectedAuthProfile>Inherit From Parent</con:selectedAuthProfile>
@@ -7796,13 +7802,41 @@ testRunner.testCase.setPropertyValue( "Key", verCode )</script>
 def groovyUtils = new com.eviware.soapui.support.GroovyUtils ( context )
 def holder = groovyUtils.getXmlHolder("CountriesUsingCurrencyRequest#Response")
 
-holder.namespaces ["ns1"] = "http://www.oorsprong.org/websamples.countryinfo "
+holder.namespaces ["ns1"] = "http://www.oorsprong.org/websamples.countryinfo"
 
-def nodeValueResp = holder.getNodeValues("//ns1:CountriesUsingCurrencyResponse[1]")
+def nodeValueResp = holder.getNodeValue("//ns1:CountriesUsingCurrencyResponse[1]/ns1:CountriesUsingCurrencyResult[1]/ns1:tCountryCodeAndName[1]/ns1:sISOCode[1]")
 
 if (nodeValueResp == null)
+	{
+	log.error "Countries using currency has a null values response"
+	}
+else
+	{
+	log.info "Response returned: " + nodeValueResp.toString()
+	}</script>
+        </con:config>
+      </con:testStep>
+      <con:testStep type="groovy" name="AssertAllCountriesUsingCurrencyNotNullGroovy Script" id="986420e8-904d-4fe5-96da-fb35c5fa413c">
+        <con:settings/>
+        <con:config>
+          <script>import com.eviware.soapui.support.GroovyUtils
 
-	log.error "Countries using currency has a null values response"</script>
+def groovyUtils = new com.eviware.soapui.support.GroovyUtils ( context )
+def holder = groovyUtils.getXmlHolder("CountriesUsingCurrencyRequest#Response")
+
+holder.namespaces ["ns1"] = "http://www.oorsprong.org/websamples.countryinfo"
+
+def nodeValueResps = holder.getNodeValues("//ns1:CountriesUsingCurrencyResponse[1]/ns1:CountriesUsingCurrencyResult[1]")
+
+if (nodeValueResps == null)
+	{
+	log.error "Countries using currency has a null values response"
+	}
+else
+	{
+	for (item in holder.getNodeValues("//ns1:tCountryCodeAndName/ns1:sISOCode"))
+		log.info "Response returned: [$item]"
+	}</script>
         </con:config>
       </con:testStep>
       <con:properties/>
@@ -7879,7 +7913,7 @@ if (nodeValueResp == null)
             <con:propertyName>Response</con:propertyName>
             <con:assertion type="Response SLA Assertion" name="Response SLA" id="0ba1c265-9e72-45ea-84df-a1aeeca8ae3a">
               <con:configuration>
-                <SLA>1000</SLA>
+                <SLA>2000</SLA>
               </con:configuration>
             </con:assertion>
           </con:entry>
